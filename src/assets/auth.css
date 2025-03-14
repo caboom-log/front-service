@@ -1,0 +1,173 @@
+:root {
+  --primary-color: #4EA685;
+  --secondary-color: #57B894;
+  --black: #000000;
+  --white: #ffffff;
+  --gray: #efefef;
+  --gray-2: #757575;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+.auth-container * {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.auth-container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ✅ 반쪽 원형 배경 */
+.auth-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  background-color: var(--primary-color);
+  border-bottom-right-radius: 100%;
+  border-top-left-radius: 0;
+  left: 0;
+  z-index: 0;
+  transition: transform 0.5s ease;
+}
+
+/* ✅ 양쪽 컨테이너 */
+.auth-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
+  max-width: 1200px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-content .text {
+  flex: 1;
+  padding: 2rem;
+}
+
+.auth-content .form-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✅ 폼 스타일 */
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+}
+
+.auth-form h2 {
+  color: var(--black);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-group i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--gray-2);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  padding-left: 3rem;
+  border: 1px solid var(--gray);
+  border-radius: 0.5rem;
+  background-color: var(--gray);
+  font-size: 1rem;
+}
+
+.input-group input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: var(--secondary-color);
+}
+
+.auth-form p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.auth-form p b {
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+.auth-form p b:hover {
+  text-decoration: underline;
+}
+
+.auth-content .text h2 {
+  color: var(--white);
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.auth-content .text p {
+  color: var(--white);
+}
+
+/* ✅ 반응형 처리 */
+@media (max-width: 768px) {
+  .auth-container::before {
+    width: 100%;
+    height: 30vh;
+    border-radius: 0;
+  }
+
+  .auth-content {
+    flex-direction: column;
+  }
+
+  .auth-content .text {
+    text-align: center;
+  }
+
+  .auth-form {
+    width: 100%;
+    max-width: 90%;
+  }
+}
