@@ -11,6 +11,26 @@
         v-model="email" 
         required
       />
+      <button 
+        @click="sendEmailCode" 
+        :disabled="isSendingCode"
+      >
+        {{ isSendingCode ? '인증코드 재전송' : '인증코드 보내기' }}
+      </button>
+    </div>
+
+    <div class="input-group">
+      <label for="emailCode">이메일 인증코드</label>
+      <input 
+        type="text" 
+        id="emailCode"
+        v-model="emailCode" 
+        placeholder="인증코드 입력"
+        required
+      />
+      <button @click="verifyEmailCode">
+        인증
+      </button>
     </div>
 
     <div class="input-group">
@@ -96,19 +116,71 @@ export default {
       email: '',
       password: '',
       passwordConfirm: '',
-      mobile: '',
-      blogFid: ''
+      emailCode: '',
+      isEmailVerified: false,
+      isSendingCode: false
     };
   },
   methods: {
-    async signup() {
-      if (this.password !== this.confirmPassword) {
-        alert('Passwords do not match!');
+
+    async sendEmailCode() {
+      if (!this.email) {
+        alert('이메일을 입력해주세요.');
         return;
       }
 
       try {
-        const response = await api.post('/api/auth/register', {
+        this.isSendingCode = true;
+        const response = await api.post('/auth/send-email-code', {
+          email: this.email
+        });
+
+        alert(response.data.message || '인증코드 발송 성공');
+        setTimeout(() => {
+          this.isSendingCode = false;
+        }, 30000);
+      } catch (error) {
+        alert('인증코드 발송 실패. 다시 시도해주세요.');
+      }
+    },
+
+    async verifyEmailCode() {
+      if (!this.emailCode) {
+        alert('인증코드를 입력해주세요.');
+        return;
+      }
+
+      try {
+        const response = await api.post('/auth/verify-email', {
+          email: this.email,
+          code: this.emailCode
+        });
+
+        if (response.data.verified) {
+          this.isEmailVerified = true;
+          alert('이메일 인증 완료!');
+        } else {
+          alert('인증코드가 올바르지 않습니다.');
+        }
+      } catch (error) {
+        alert('인증 실패. 다시 시도해 주세요.');
+      }
+    },
+
+
+    async signup() {
+      if (!this.isEmailVerified) {
+        alert('이메일 인증을 완료해주세요.');
+        return;
+      }
+
+      if (this.password !== this.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      try {
+        const response = await api.post('/auth/register', {
           "username": this.username,
           "email": this.email,
           "password": this.password,

@@ -2,7 +2,7 @@
     <div class="auth-container">
     <div class="auth-content">
     <div class="text">
-        <h2>{{ isSignIn ? 'Please log in ✨' : 'Join with us!' }}</h2>
+        <h2>{{ isSignIn ? 'Please log in ✨' : 'Join with us😎' }}</h2>
     </div>
     <div class="form-wrapper">
         <slot></slot>
