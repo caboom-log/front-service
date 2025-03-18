@@ -34,12 +34,12 @@
     </div>
 
     <div class="input-group">
-      <label for="username">사용자 이름</label>
+      <label for="name">닉네임</label>
       <i class="bx bxs-user"></i>
       <input 
         type="text" 
-        id="username"
-        v-model="username" 
+        id="name"
+        v-model="name" 
         required
       />
     </div>
@@ -112,7 +112,7 @@ import api from '@/api';
 export default {
   data() {
     return {
-      username: '',
+      name: '',
       email: '',
       password: '',
       passwordConfirm: '',
@@ -131,14 +131,14 @@ export default {
 
       try {
         this.isSendingCode = true;
-        const response = await api.post('/auth/send-email-code', {
+        const response = await api.post('/auth/send-verification-code', {
           email: this.email
         });
 
         alert(response.data.message || '인증코드 발송 성공');
         setTimeout(() => {
           this.isSendingCode = false;
-        }, 30000);
+        }, 10000);
       } catch (error) {
         alert('인증코드 발송 실패. 다시 시도해주세요.');
       }
@@ -174,14 +174,14 @@ export default {
         return;
       }
 
-      if (this.password !== this.confirmPassword) {
+      if (this.password !== this.passwordConfirm) {
         alert('비밀번호가 일치하지 않습니다.');
         return;
       }
 
       try {
         const response = await api.post('/auth/register', {
-          "username": this.username,
+          "name": this.name,
           "email": this.email,
           "password": this.password,
           "password-confirm": this.passwordConfirm,
