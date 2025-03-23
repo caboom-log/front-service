@@ -38,6 +38,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}"
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
             
             sudo mkdir -p /caboomlog/nginx
@@ -46,8 +47,15 @@ jobs:
             echo "${{ secrets.NGINX_CONF }}" | sudo tee /caboomlog/nginx/nginx.conf > /dev/null
           
             cd /caboomlog
+          
+            if [ -z "$DOCKER_USERNAME" ]; then
+              echo "DOCKER_USERNAME is empty! Setting manually..."
+              export DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
+            fi
+          
+            echo "Using DOCKER_USERNAME=$DOCKER_USERNAME"
+          
             DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml stop nginx front-service || true
             DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml rm -f nginx front-service || true
             DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml pull nginx front-service
             DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml up -d nginx front-service
-
