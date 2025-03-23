@@ -29,5 +29,5 @@ jobs:
       - name: Build and push Docker images
         run: |
           cd /
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/caboomlog-front-service:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/caboomlog-front-service:latest -f ./Dockerfile .
           docker push ${{ secrets.DOCKER_USERNAME }}/caboomlog-front-service:latest
