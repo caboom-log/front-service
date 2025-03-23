@@ -43,6 +43,7 @@ jobs:
             sudo mkdir -p /caboomlog/nginx
             sudo mkdir -p /caboomlog/front-service
 
+
             echo "${{ secrets.NGINX_CONF }}" | sudo tee /caboomlog/nginx/nginx.conf > /dev/null
 
             sudo docker-compose stop nginx front-service || true
