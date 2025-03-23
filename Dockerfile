@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build -- --dest /app/dist
 
 # NGINX에 배포
 FROM nginx:1.25
