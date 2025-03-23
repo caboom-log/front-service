@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN ls -la && cat vue.config.js || true
 RUN npm run build -- --dest /app/dist
 
 # NGINX에 배포
