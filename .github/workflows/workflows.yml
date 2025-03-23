@@ -30,3 +30,23 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/caboomlog-front-service:latest -f ./Dockerfile .
           docker push ${{ secrets.DOCKER_USERNAME }}/caboomlog-front-service:latest
+      
+      - name: Deploy to ubuntu server
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd ~/caboomlog
+            mkdir -p ./nginx
+            mkdir -p ./front-service
+
+            echo "${{ secrets.NGINX_CONF }}" > ./nginx/nginx.conf
+
+            docker-compose stop nginx front-service || true
+            docker-compose rm -f nginx front-service || true
+
+            docker-compose pull nginx front-service
+            docker-compose up -d nginx front-service
+
