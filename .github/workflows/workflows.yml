@@ -42,12 +42,12 @@ jobs:
   
             sudo mkdir -p /caboomlog/nginx
             sudo mkdir -p /caboomlog/front-service
-
-
+          
             echo "${{ secrets.NGINX_CONF }}" | sudo tee /caboomlog/nginx/nginx.conf > /dev/null
-
-            sudo docker-compose stop nginx front-service || true
-            sudo docker-compose rm -f nginx front-service || true
-            sudo docker-compose pull nginx front-service
-            sudo docker-compose up -d nginx front-service
+          
+            cd /caboomlog
+            sudo docker compose -f docker-compose.yml stop nginx front-service || true
+            sudo docker compose -f docker-compose.yml rm -f nginx front-service || true
+            sudo docker compose -f docker-compose.yml pull nginx front-service
+            sudo docker compose -f docker-compose.yml up -d nginx front-service
 
