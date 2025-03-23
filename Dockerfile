@@ -8,5 +8,6 @@ RUN npm run build
 
 # NGINX에 배포
 FROM nginx:1.25
-COPY --from=builder /app/dist /usr/share/nginx/html
+RUN mkdir -p /usr/share/nginx/html
+COPY --from=builder /app/dist/. /usr/share/nginx/html/
 EXPOSE 80
