@@ -38,15 +38,16 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            cd /caboomlog
-            mkdir -p ./nginx
-            mkdir -p ./front-service
+            export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+  
+            sudo mkdir -p /caboomlog/nginx
+            sudo mkdir -p /caboomlog/front-service
 
-            echo "${{ secrets.NGINX_CONF }}" > ./nginx/nginx.conf
 
-            docker-compose stop nginx front-service || true
-            docker-compose rm -f nginx front-service || true
+            echo "${{ secrets.NGINX_CONF }}" | sudo tee /caboomlog/nginx/nginx.conf > /dev/null
 
-            docker-compose pull nginx front-service
-            docker-compose up -d nginx front-service
+            sudo docker-compose stop nginx front-service || true
+            sudo docker-compose rm -f nginx front-service || true
+            sudo docker-compose pull nginx front-service
+            sudo docker-compose up -d nginx front-service
 
