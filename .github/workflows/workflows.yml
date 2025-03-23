@@ -39,15 +39,15 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-  
+            
             sudo mkdir -p /caboomlog/nginx
             sudo mkdir -p /caboomlog/front-service
           
             echo "${{ secrets.NGINX_CONF }}" | sudo tee /caboomlog/nginx/nginx.conf > /dev/null
           
             cd /caboomlog
-            sudo docker compose -f docker-compose.yml stop nginx front-service || true
-            sudo docker compose -f docker-compose.yml rm -f nginx front-service || true
-            sudo docker compose -f docker-compose.yml pull nginx front-service
-            sudo docker compose -f docker-compose.yml up -d nginx front-service
+            DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml stop nginx front-service || true
+            DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml rm -f nginx front-service || true
+            DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml pull nginx front-service
+            DOCKER_USERNAME=${DOCKER_USERNAME} sudo docker compose -f docker-compose.yml up -d nginx front-service
 
