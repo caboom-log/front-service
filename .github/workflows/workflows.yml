@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            cd ~/caboomlog
+            cd /caboomlog
             mkdir -p ./nginx
             mkdir -p ./front-service
 
