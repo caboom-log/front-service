@@ -17,18 +17,31 @@
     import BlogNavbar from '../components/BlogNavbar.vue';
     import BlogSidebar from '../components/BlogSidebar.vue';
 
+    import api from '@/api';
+
+
     export default {
     components: {
         AppHeader,
         BlogNavbar,
         BlogSidebar
     },
-    props: {
-        topics: {
-        type: Array,
-        required: true,
-        default: () => []
-        }
+    data() {
+    return {
+      topics: []
+    };
+    },
+    async mounted() {
+      try {
+        const topicResponse = await api.get('/api/topics');
+        this.topics = topicResponse.data.contents.map(topic => ({
+          id: topic.topicId,
+          name: topic.topicName,
+          link: `/index?topic-id=${topic.topicId}`
+        }));
+      } catch (error) {
+        console.error('Failed to fetch topics:', error);
+      }
     }
     };
 </script>

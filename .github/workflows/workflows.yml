@@ -1,43 +1,50 @@
-name: front-service ci/cd
+name: Deploy Vue3 Front
 
 on:
   push:
-    branches:
-      - main
+    branches: 
+        - main
+        - develop
 
 jobs:
-  front-build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@master
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.DEPLOY_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            echo "==> Removing old files..."
-            sudo rm -rf front-remote
-            sudo mkdir front-remote
-            cd ./front-remote
-            
-            echo "==> Cloning repository..."
-            sudo git clone https://github.com/caboom-log/front-service.git
-            cd ./front-service
-            
-            echo "==> Installing dependencies..."
-            sudo npm install
-            
-            echo "==> Building frontend..."
-            sudo npm run build
-            
-            echo "==> Setting permissions..."
-            sudo chmod -R 755 /app/dist
-            
-            echo "==> Restarting NGINX..."
-            sudo docker-compose restart nginx
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Vue App
+        run: npm run build
+
+      - name: Decode PEM file
+        run: |
+          echo "${{ secrets.PEM_KEY }}" | base64 -d > caboomlog.pem
+          chmod 600 caboomlog.pem
+
+      - name: Clean remote directory
+        run: |
+          ssh -i caboomlog.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "sudo rm -rf /caboomlog/front-service/* && sudo chown -R ubuntu:ubuntu /caboomlog/front-service"
+
+      - name: Upload dist folder
+        run: |
+          scp -i caboomlog.pem -o StrictHostKeyChecking=no -r app/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/caboomlog/front-service/
+
+      - name: Set permissions for NGINX
+        run: |
+          ssh -i caboomlog.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "sudo chown -R www-data:www-data /caboomlog/front-service && sudo chmod -R 755 /caboomlog/front-service"
+
+      - name: Restart NGINX container
+        run: |
+          ssh -i caboomlog.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd /caboomlog && docker compose down nginx && docker compose up nginx -d"

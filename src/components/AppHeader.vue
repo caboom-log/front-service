@@ -20,15 +20,22 @@
 <script>
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
+import api from '@/api';
 
 export default {
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
 
-    const logout = () => {
-      authStore.logout();
-      router.push('/');
+    const logout = async () => {
+      try {
+        await api.post('/token/logout');
+      } catch (e) {
+        console.error('Logout request failed:', e);
+      } finally {
+        authStore.logout();
+        router.push('/');
+      }
     };
 
     return {

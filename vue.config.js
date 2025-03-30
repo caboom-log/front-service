@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
-  outputDir: '/app/dist',
+  outputDir: 'app/dist',
   publicPath: '/',
   devServer: {
     historyApiFallback: true

@@ -85,6 +85,7 @@
           }));
         } catch (error) {
           console.error('Failed to fetch posts:', error);
+          this.posts=[];
         }
       },
       search() {
