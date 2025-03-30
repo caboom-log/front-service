@@ -7,7 +7,7 @@
         </div>
 
         <div class="col-md-4">
-            <blog-sidebar />
+            <main-sidebar />
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@
 <script>
     import AppHeader from '../components/AppHeader.vue';
     import BlogNavbar from '../components/BlogNavbar.vue';
-    import BlogSidebar from '../components/BlogSidebar.vue';
+    import MainSidebar from '../components/MainSidebar.vue';
 
     import api from '@/api';
 
@@ -24,7 +24,7 @@
     components: {
         AppHeader,
         BlogNavbar,
-        BlogSidebar
+        MainSidebar
     },
     data() {
     return {
