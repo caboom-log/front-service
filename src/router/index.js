@@ -44,17 +44,33 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
+import api from '@/api.js';
 
-router.beforeEach((to, from, next) => {
-    const authStore = useAuthStore();
-    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-      alert('로그인이 필요합니다.');
-      next('/auth/login');
-    } else if (to.path === '/auth/login' && authStore.isAuthenticated) {
-      next(`/blog/${authStore.user.blogFid}`);
-    } else {
-      next();
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore();
+
+  if (authStore.token && !authStore.user) {
+    try {
+      const res = await api.get('/api/members');
+      authStore.setUser(res.data);
+    } catch (e) {
+      console.error('Failed to fetch user info:', e);
+      authStore.logout();
+      return next('/auth/login');
     }
-  });
+  }
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    alert('로그인이 필요합니다.');
+    return next('/auth/login');
+  }
+
+  if (to.path === '/auth/login' && authStore.isAuthenticated) {
+    return next(`/blog/${authStore.user.mainBlogFid}`);
+  }
+
+  return next();
+});
+
 
 export default router;

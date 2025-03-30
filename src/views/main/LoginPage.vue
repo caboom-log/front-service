@@ -1,15 +1,17 @@
 <template>
   <div class="auth-form">
     <h2>Login</h2>
-    <div class="input-group">
-      <i class="bx bxs-user"></i>
-      <input type="text" v-model="email" placeholder="이메일 아이디 입력">
-    </div>
-    <div class="input-group">
-      <i class="bx bxs-lock-alt"></i>
-      <input type="password" v-model="password" placeholder="패스워드 입력">
-    </div>
-    <button @click="login">로그인</button>
+    <form @submit.prevent="login">
+      <div class="input-group">
+        <i class="bx bxs-user"></i>
+        <input type="text" v-model="email" placeholder="이메일 아이디 입력">
+      </div>
+      <div class="input-group">
+        <i class="bx bxs-lock-alt"></i>
+        <input type="password" v-model="password" placeholder="패스워드 입력">
+      </div>
+      <button type="submit" @click="login">로그인</button>
+    </form>
     <p>
       아직 가입하지 않으셨나요? 
       <router-link to="/member/signup">
@@ -40,28 +42,32 @@ export default {
     const password = ref('');
 
     if (authStore.isAuthenticated) {
-      router.push(`/blog/${authStore.user.blogFid}`);
+      router.push(`/blog/${authStore.user.mainBlogFid}`);
     }
 
     const login = async () => {
+      event?.preventDefault();
       try {
         const response = await api.post('/auth/login', {
           email: email.value,
           password: password.value
-        });
-
-        authStore.setToken(response.data.token);
-
-        const userResponse = await api.get('/api/members', {
+          }, {
           headers: {
-            Authorization: `Bearer ${response.data.token}`
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
           }
         });
 
+        const accessToken = response.data.token;
+        authStore.setToken(accessToken);
+
+        const userResponse = await api.get('/api/members');
         authStore.setUser(userResponse.data);
 
-        if (response.status === 200) {
-          router.push(`/blog/${userResponse.data.blogFid}`);
+        if (response.status === 401 || response.status === 403) {
+          alert('아이디 또는 패스워드를 다시 확인해주세요.');
+        } else if (response.status === 200) {
+          router.push(`/blog/${authStore.user.mainBlogFid}`);
         }
       } catch (error) {
         console.error('Login failed:', error);

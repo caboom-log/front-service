@@ -12,15 +12,17 @@
       </nav>
     </div>
   </template>
-  
-  <script>
-  export default {
-    props: {
-      'topics': {
-        type: Array,
-        required: true
-      }
+
+<script>
+export default {
+  props: {
+    topics: {
+      type: Array,
+      required: true,
+      default: () => []
     }
-  };
-  </script>
+  }
+};
+</script>
+
   
