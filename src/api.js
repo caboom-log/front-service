@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useAuthStore } from '@/store/auth';
 
 const api = axios.create({
-  baseURL: 'http://www.caboomlog.site/gateway',
+  // baseURL: 'http://www.caboomlog.site/gateway',
+  baseURL: 'http://localhost:8090',
   withCredentials: true,
   headers: {
     'Accept': 'application/json',

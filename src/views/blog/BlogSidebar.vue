@@ -1,5 +1,15 @@
 <template>
     <div>
+
+        <div v-if="isMember" class="mb-3">
+      <router-link
+        :to="`/blog/${blogFid}/write`"
+        class="btn btn-primary"
+      >
+        글쓰기
+      </router-link>
+    </div>
+
       <!-- Search -->
       <div class="sidebar-box">
             <form action="#" class="search-form">
@@ -104,9 +114,28 @@
             
   </template>
 
-<script>
-export default {};
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const blogFid = route.params.blogFid
+
+const isMember = ref(false)
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`/api/blogs/${blogFid}/members/me}`, {
+      method: 'GET',
+    })
+    const result = await res.json()
+    isMember.value = result.isMember === true
+  } catch (e) {
+    console.log('')
+  }
+})
 </script>
+
 
 <style scoped>
 @import '@/assets/elen/css/open-iconic-bootstrap.min.css';

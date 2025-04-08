@@ -15,10 +15,10 @@
         <div class="col-md-8 text text-center">
           <div class="img mb-4" :style="{ backgroundImage: `url(${authorImage})` }"></div>
           <div class="desc">
-            <h2 class="subheading">Hello I'm</h2>
-            <h1 class="mb-4">Elen Henderson</h1>
-            <p class="mb-4">I am A Blogger Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-                    <p><a href="#" class="btn-custom">More About Me <span class="ion-ios-arrow-forward"></span></a></p>
+            <h2 class="subheading">Welcome to</h2>
+            <h1 class="mb-4">{{ blogInfo.blogName }}</h1>
+            <p class="mb-4">{{ blogInfo.blogDesc }}</p>
+                    <p><a href="#" class="btn-custom">Explore the Blog <span class="ion-ios-arrow-down"></span></a></p>
           </div>
         </div>
       </div>
@@ -30,27 +30,35 @@
   import api from '@/api';
   
   import defaultBg from '@/assets/elen/images/bg_1.jpg';
-  import authorImage from '@/assets/elen/images/author.jpg';
+  import authorImage from '@/assets/blog_default.png';
   
   const route = useRoute();
   const blogFid = route.params.blogFid;
+  const blogInfo = ref({ blogName: '', blogDesc: '', blogMainImg: '' })
   
   const bgImageUrl = ref(defaultBg);
   
   onMounted(async () => {
-    // 🎯 블로그 이미지 불러오기
+
     try {
-      const response = await api.get(`/api/blog/${blogFid}/main-img`, {
+      const blogInfoResponse = (await api.get(`/api/blogs/${blogFid}`));
+      console.log('블', blogInfoResponse);
+      blogInfo.value = blogInfoResponse.data.content;
+    } catch(e) {
+      console.warn('블로그 정보 가져오기 실패');
+    }
+
+    try {
+      const blogMainImg = await api.get(`/api/blogs/${blogFid}/main-img`, {
         responseType: 'blob',
       });
   
-      const imageBlob = response.data;
+      const imageBlob = blogMainImg.data;
       bgImageUrl.value = URL.createObjectURL(imageBlob);
     } catch (e) {
-      console.warn('블로그 메인 이미지 가져오기 실패, 기본 이미지 사용:', e);
+      console.log('블로그 메인 이미지 가져오기 실패, 기본 이미지 사용:', e);
     }
   
-    // 🧩 외부 JS 동적 로딩
     const jsFiles = [
       'jquery.min.js',
       'jquery-migrate-3.0.1.min.js',

@@ -11,7 +11,7 @@
         내 블로그 바로가기
       </router-link>
       <router-link
-        to="/member/register"
+        to="/member/signup"
         class="btn btn-lg btn-outline-info"
       >
         회원가입
