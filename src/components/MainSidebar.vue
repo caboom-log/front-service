@@ -24,6 +24,25 @@
         블로그 만들기
       </router-link>
     </div>
+
+    <div v-if="blogs.length" class="mt-4">
+        <h6 class="fw-bold">내 블로그 목록</h6>
+        <div
+          v-for="blog in blogs"
+          :key="blog.blogFid"
+          class="d-flex justify-content-between align-items-center mb-2"
+        >
+          <span>{{ blog.blogName }}</span>
+          <div>
+            <router-link :to="`/blog/${blog.blogFid}`" class="btn btn-sm btn-outline-primary me-2">
+              바로가기
+            </router-link>
+            <router-link :to="`/blog/${blog.blogFid}/manage/member`" class="btn btn-sm btn-outline-secondary">
+              관리하기
+            </router-link>
+          </div>
+          </div>
+          </div>
     
     </div>
  
@@ -31,23 +50,41 @@
 
 <script>
 import { useAuthStore } from '@/store/auth';
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import api from '@/api';
 
 export default {
   setup() {
     const authStore = useAuthStore();
+    const blogs = ref([]);
 
     const blogLink = computed(() => {
-      console.log(authStore.user)
       return authStore.user
         ? `/blog/${authStore.user.mainBlogFid}`
         : '/auth/login';
+    });
+
+    const fetchBlogs = async () => {
+      if (!authStore.user) return;
+      try {
+        const res = await api.get(`/api/blogs/me`);
+        blogs.value = res.data.content;
+      } catch (err) {
+        console.error('블로그 목록 조회 실패', err);
+      }
+    };
+
+    onMounted(() => {
+      if (authStore.isAuthenticated) {
+        fetchBlogs();
+      }
     });
 
     return {
       isAuthenticated: authStore.isAuthenticated,
       user: authStore.user,
       blogLink,
+      blogs,
     };
   },
 };

@@ -43,6 +43,12 @@ const routes = [
     name: 'CreateBlog',
     component: CreateBlog,
     meta: { layout: 'MainLayout', requiresAuth: true }
+  },
+  {
+    path: '/blog/:blogFid/manage/member',
+    name: 'ManageBlogMember',
+    component: ManageBlog,
+    meta: { layout: 'BlogManageLayout', requiresAuth: true }
   }
 ];
 
@@ -52,6 +58,7 @@ const router = createRouter({
 });
 import api from '@/api.js';
 import CreateBlog from '@/views/blog/CreateBlog.vue';
+import ManageBlog from '@/views/blog/ManageBlogMember.vue';
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
