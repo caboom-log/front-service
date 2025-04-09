@@ -16,8 +16,17 @@
       >
         회원가입
       </router-link>
+
+      <router-link
+        to="/blog-create"
+        class="btn btn-lg btn-outline-info"
+      >
+        블로그 만들기
+      </router-link>
     </div>
-  </div>
+    
+    </div>
+ 
 </template>
 
 <script>

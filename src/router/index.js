@@ -37,6 +37,12 @@ const routes = [
     name: 'SignupPage',
     component: SignupPage,
     meta: { layout: 'AuthLayout' }
+  },
+  {
+    path: '/blog-create',
+    name: 'CreateBlog',
+    component: CreateBlog,
+    meta: { layout: 'MainLayout', requiresAuth: true }
   }
 ];
 
@@ -45,6 +51,7 @@ const router = createRouter({
   routes
 });
 import api from '@/api.js';
+import CreateBlog from '@/views/blog/CreateBlog.vue';
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
