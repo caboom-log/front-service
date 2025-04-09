@@ -2,7 +2,10 @@
 
   <div class="d-flex justify-content-start px-4 py-3">
       <router-link to="/" class="btn btn-outline-secondary">
-        🏠 
+        🏠 Home
+      </router-link>
+      <router-link :to="`/blog/${blogFid}`" class="btn btn-outline-secondary">
+        📝 블로그 홈
       </router-link>
     </div>
     

@@ -23,7 +23,11 @@
             <h3 class="sidebar-heading">🌸 Manage blog </h3>
             <ul class="categories">
             <li><a href="#">블로그 통계 </a></li>
-            <li><a href="#">블로그 정보 수정 </a></li>
+            <li>
+                <router-link :to="`/blog/${blogFid}/manage/info`">
+                    블로그 정보 수정
+                </router-link>
+            </li>
             <li v-if="blogType === 'team'"><a href="#">블로그 멤버 관리 </a></li>
             <li><a href="#">블로그 탈퇴 </a></li>
             </ul>
