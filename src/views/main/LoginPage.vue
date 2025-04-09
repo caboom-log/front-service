@@ -62,7 +62,8 @@ export default {
         authStore.setToken(accessToken);
 
         const userResponse = await api.get('/api/members');
-        authStore.setUser(userResponse.data);
+        console.log("user response" , userResponse)
+        authStore.setUser(userResponse.data.content);
 
         if (response.status === 401 || response.status === 403) {
           alert('아이디 또는 패스워드를 다시 확인해주세요.');

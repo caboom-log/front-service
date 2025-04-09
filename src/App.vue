@@ -14,12 +14,14 @@ import { useRoute } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import BlogLayout from '@/layouts/BlogLayout.vue';
+import BlogManageLayout from '@/layouts/BlogManageLayout.vue';
 
 export default {
   components: {
     MainLayout,
     AuthLayout,
-    BlogLayout
+    BlogLayout,
+    BlogManageLayout
   },
   setup() {
     const route = useRoute();
@@ -28,6 +30,7 @@ export default {
       const layoutName = route.meta.layout;
       if (layoutName === 'AuthLayout') return 'AuthLayout';
       if (layoutName === 'BlogLayout') return 'BlogLayout';
+      if (layoutName === 'BlogManageLayout') return 'BlogManageLayout';
       return 'MainLayout';
     });
 

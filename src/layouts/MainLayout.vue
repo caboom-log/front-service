@@ -1,21 +1,23 @@
 <template>
     <div class="container">
         <app-header />
-        <blog-navbar :topics="topics" />
-        <div class="content-area">
-            <slot></slot>
-        </div>
+        <main-navbar :topics="topics" />
+        <div class="row">
+          <div class="col-md-8">
+              <slot></slot>
+          </div>
 
-        <div class="col-md-4">
-            <blog-sidebar />
+          <div class="col-md-4">
+              <main-sidebar />
+          </div>
         </div>
     </div>
 </template>
 
 <script>
     import AppHeader from '../components/AppHeader.vue';
-    import BlogNavbar from '../components/BlogNavbar.vue';
-    import BlogSidebar from '../components/BlogSidebar.vue';
+    import MainNavbar from '../components/MainNavbar.vue';
+    import MainSidebar from '../components/MainSidebar.vue';
 
     import api from '@/api';
 
@@ -23,8 +25,8 @@
     export default {
     components: {
         AppHeader,
-        BlogNavbar,
-        BlogSidebar
+        MainNavbar,
+        MainSidebar
     },
     data() {
     return {
@@ -34,7 +36,8 @@
     async mounted() {
       try {
         const topicResponse = await api.get('/api/topics');
-        this.topics = topicResponse.data.contents.map(topic => ({
+        console.log("topic: ", topicResponse);
+        this.topics = topicResponse.data.content.map(topic => ({
           id: topic.topicId,
           name: topic.topicName,
           link: `/index?topic-id=${topic.topicId}`
