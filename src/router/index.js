@@ -55,6 +55,12 @@ const routes = [
     name: 'ManageBlogInfo',
     component: ManageBlogInfo,
     meta: { layout: 'BlogManageLayout', requiresAuth: true }
+  },
+  {
+    path: '/blog/:blogFid/manage/category',
+    name: 'ManageCategory',
+    component: ManageCategory,
+    meta: { layout: 'BlogManageLayout', requiresAuth: true }
   }
 ];
 
@@ -66,6 +72,7 @@ import api from '@/api.js';
 import CreateBlog from '@/views/blog/CreateBlog.vue';
 import ManageBlog from '@/views/blog/ManageBlogMember.vue';
 import ManageBlogInfo from '@/views/blog/ManageBlogInfo.vue';
+import ManageCategory from '@/views/blog/ManageCategory.vue';
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();

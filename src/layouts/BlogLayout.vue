@@ -23,7 +23,7 @@
   <script>
   import { onMounted } from 'vue';
   import BlogHero from '@/views/blog/BlogHero.vue';
-  import BlogSidebar from '@/views/blog/BlogSidebar.vue';
+  import BlogSidebar from '@/views/blog/sidebar/BlogSidebar.vue';
   
   export default {
     components: {

@@ -29,7 +29,8 @@
   </template>
   
   <script>
-  import { onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
   import BlogManageSidebar from '@/views/blog/BlogManageSidebar.vue';
   
   export default {
@@ -37,9 +38,13 @@
       BlogManageSidebar
     },
     setup() {
+      const route = useRoute();
+      const blogFid = ref('');
+      
       onMounted(() => {
+        blogFid.value = route.params.blogFid;
         const meta = document.createElement('meta');
-  meta.name = 'viewport';
+   meta.name = 'viewport';
   meta.content = 'width=device-width, initial-scale=1, shrink-to-fit=no';
 
   // 중복 방지
@@ -86,6 +91,9 @@
           document.head.appendChild(link);
         });
       });
+      return {
+        blogFid
+      };
     }
   };
   </script>
