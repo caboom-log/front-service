@@ -16,12 +16,16 @@ import AuthLayout from '@/layouts/AuthLayout.vue';
 import BlogLayout from '@/layouts/BlogLayout.vue';
 import BlogManageLayout from '@/layouts/BlogManageLayout.vue';
 
+import BlogSimpleLayout from './layouts/BlogSimpleLayout.vue';
+
+
 export default {
   components: {
     MainLayout,
     AuthLayout,
     BlogLayout,
-    BlogManageLayout
+    BlogManageLayout,
+    BlogSimpleLayout
   },
   setup() {
     const route = useRoute();
@@ -31,6 +35,8 @@ export default {
       if (layoutName === 'AuthLayout') return 'AuthLayout';
       if (layoutName === 'BlogLayout') return 'BlogLayout';
       if (layoutName === 'BlogManageLayout') return 'BlogManageLayout';
+
+      if (layoutName === 'BlogSimpleLayout') return 'BlogSimpleLayout';
       return 'MainLayout';
     });
 

@@ -7,50 +7,64 @@
           :key="post.id"
           class="col-md-12"
         >
-          <div class="blog-entry ftco-animate">
-            <a
-              href="#"
-              class="img"
-              :style="{ backgroundImage: `url(${post.thumbnail})` }"
-            ></a>
-            <div class="text pt-2 mt-3">
-              <span class="category mb-1 d-block"><a class="custom" href="#"></a></span>
-              <h3 class="mb-4">
-                <a href="#" class="post-title">{{ post.title }}</a>
-              </h3>
-              <p class="mb-4 custom">{{ post.summary }}</p>
-              <div class="author mb-4 d-flex align-items-center">
-                <a
-                  href="#"
-                  class="img"
-                  :style="{ backgroundImage: `url(${post.authorImg})` }"
-                ></a>
-                <div class="ml-3 info">
-                  <span>Written by</span>
-                  <h3>
-                    <a href="#">{{ post.author }}</a>,
-                    <span>{{ post.date }}</span>
-                  </h3>
-                </div>
+        <div class="blog-entry ftco-animate">
+          <a
+            href="#"
+            class="img"
+            :style="{ backgroundImage: `url(${post.thumbnail})` }"
+          ></a>
+          <div class="text pt-2 mt-3">
+            <span class="category mb-1 d-block"><a class="custom" href="#"></a></span>
+            <h3 class="mb-4">
+              <router-link
+                :to="`/blog/${blogFid}/post/${post.postId}`"
+                class="post-title"
+              >
+                {{ post.title }}
+              </router-link>
+
+            </h3>
+            <p class="mb-4 custom">{{ post.summary }}</p>
+            <div class="author mb-4 d-flex align-items-center">
+              <a
+                href="#"
+                class="img"
+                :style="{ backgroundImage: `url(${post.authorImg})` }"
+              ></a>
+              <div class="ml-3 info">
+                <span>Written by</span>
+                <h3>
+
+                  <a href="#">{{ post.blogFid }}</a>,
+                  <span>{{ post.date }}</span>
+                  <span>{{ post.createdAt }}</span>
+
+                </h3>
               </div>
-              <div class="meta-wrap d-md-flex align-items-center">
-                <div class="half order-md-last text-md-right">
-                  <p class="meta">
-                    <span><i class="icon-heart"></i>{{ post.likes }}</span>
-                    <span><i class="icon-eye"></i>{{ post.views }}</span>
-                    <span><i class="icon-comment"></i>{{ post.comments }}</span>
-                  </p>
-                </div>
-                <div class="half">
-                  <p>
-                    <a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a>
-                  </p>
-                </div>
+            </div>
+            <div class="meta-wrap d-md-flex align-items-center">
+              <div class="half order-md-last text-md-right">
+                <p class="meta">
+                  <span><i class="icon-heart"></i> {{ post.likes }}</span>
+                  <span><i class="icon-eye"></i> {{ post.viewCount }}</span>
+                  <span><i class="icon-comment"></i> {{ post.comments }}</span>
+                </p>
+              </div>
+              <div class="half">
+                <p>
+                  <router-link
+                    :to="`/blog/${blogFid}/post/${post.postId}`"
+                    class="btn btn-primary p-3 px-xl-4 py-xl-3"
+                  >
+                    Continue Reading
+                  </router-link>
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
       <!-- Pagination -->
       <div class="row mt-5">
@@ -81,33 +95,22 @@ const route = useRoute();
 const blogFid = route.params.blogFid;
 const posts = ref([]);
 
-const defaultThumbnail = new URL('@/assets/elen/images/image_5.jpg', import.meta.url).href;
+const defaultThumbnail = new URL('@/assets/no_image.png', import.meta.url).href;
 const defaultAuthorImg = new URL('@/assets/elen/images/image_2.jpg', import.meta.url).href;
 onMounted(async () => {
-  const dummyPosts = [
-    { id: 1, title: 'The Newest Technology!!', summary: 'Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.', author: 'Dave Lewis', date: 'Nov 28, 2018', likes: 3, views: 100, comments: 5 },
-    { id: 2, title: 'Vue 3 Composition API', summary: 'Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of ...', author: 'Insub Yoon', date: 'Mar 30, 2025', likes: 12, views: 251, comments: 7 },
-    { id: 3, title: 'Redis + Spring Boot', summary: 'How to use Redis...', author: 'Alice Kim', date: 'Feb 12, 2025', likes: 5, views: 89, comments: 2 },
-  ];
-
-  posts.value = dummyPosts.map(p => ({
-    ...p,
-    thumbnail: defaultThumbnail,
-    authorImg: defaultAuthorImg
-  }));
-  console.log('posts:', posts.value);
+  try {
+    const res = await api.get(`/api/blogs/${blogFid}/posts/public`);
+    console.log(res);
+    posts.value = res.data.content.posts;
+  } catch(e) {
+    console.log(e);
+  }
 
 
   for (const post of posts.value) {
-    try {
-      const res = await api.get(`/api/blog/${blogFid}/posts/${post.id}/thumbnails`, {
-        responseType: 'blob'
-      });
-      const blobUrl = URL.createObjectURL(res.data);
-      post.thumbnail = blobUrl;
-    } catch (e) {
-      console.warn(`Post ${post.id} 썸네일 불러오기 실패`, e);
-    }
+    post.thumbnail = post.thumbnail == '' ? defaultThumbnail : post.thumbnail;
+    post.authorImg = defaultAuthorImg;
+
   }
   const scripts = [
           'jquery.min.js',

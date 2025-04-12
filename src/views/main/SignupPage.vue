@@ -1,4 +1,5 @@
 <template>
+  <div class="auth-page">
   <div class="auth-form">
     <h2>Sign up</h2>
 
@@ -104,6 +105,7 @@
     </p>
 
   </div>
+</div>
 </template>
   
 <script>
@@ -195,7 +197,11 @@ export default {
           alert(`회원가입 실패: ${response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
         }
       } catch (error) {
-        alert('오류가 발생했습니다.');
+        if (error.response.status === 400 || error.response.status === 409) {
+          alert(error.response.message);
+        } else {
+          alert('오류가 발생했습니다.');
+        }
       }
     }
   }
@@ -204,4 +210,26 @@ export default {
 
 <style scoped>
 @import '@/assets/auth.css';
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.auth-form {
+  padding: 2rem;
+  max-width: 500px;
+  margin: 6rem auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.auth-page {
+  padding-top: 13rem;
+}
+
+
 </style>

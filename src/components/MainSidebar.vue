@@ -37,7 +37,7 @@
             <router-link :to="`/blog/${blog.blogFid}`" class="btn btn-sm btn-outline-primary me-2">
               바로가기
             </router-link>
-            <router-link :to="`/blog/${blog.blogFid}/manage/member`" class="btn btn-sm btn-outline-secondary">
+            <router-link :to="`/blog/${blog.blogFid}/manage/info`" class="btn btn-sm btn-outline-secondary">
               관리하기
             </router-link>
           </div>

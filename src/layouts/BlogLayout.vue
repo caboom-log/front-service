@@ -2,7 +2,9 @@
     
     <div>
       <BlogHero />
-      <section class="ftco-section">
+
+      <section class="ftco-section" id="blog-section">
+
         <div class="container-fluid">
         <div class="blog-wrapper" style="width: 80%; margin: 0 auto;">
           <div class="row">
@@ -23,7 +25,7 @@
   <script>
   import { onMounted } from 'vue';
   import BlogHero from '@/views/blog/BlogHero.vue';
-  import BlogSidebar from '@/views/blog/BlogSidebar.vue';
+  import BlogSidebar from '@/views/blog/sidebar/BlogSidebar.vue';
   
   export default {
     components: {
@@ -36,12 +38,10 @@
   meta.name = 'viewport';
   meta.content = 'width=device-width, initial-scale=1, shrink-to-fit=no';
 
-  // 중복 방지
   const existing = document.querySelector('meta[name="viewport"]');
   if (!existing) {
     document.head.appendChild(meta);
   }
-        // 🔹 외부 JS 파일들 로드
         const scripts = [
           'jquery.min.js',
           'jquery-migrate-3.0.1.min.js',
@@ -67,7 +67,6 @@
           document.body.appendChild(script);
         });
   
-        // 🔹 Google Fonts 동적 로딩
         const fonts = [
           'https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700',
           'https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700'

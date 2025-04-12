@@ -13,36 +13,18 @@
         </div>
     </div>
   
-    <div class="mb-5">
-    <form @submit.prevent="search">
-        <label for="searchKeywordList" class="form-label">
-            <h2>블로그 검색</h2>
-        </label>
-        <div class="input-group">
-        <input 
-            class="form-control border-info-subtle" 
-            list="datalistOptions" 
-            id="searchKeywordList" 
-            v-model="keyword"
-            placeholder="블로그 이름으로 검색"
-        />
-        <button class="btn btn-warning btn-lg" type="submit">
-            검색
-        </button>
-        </div>
-    </form>
-    </div>
-  
+    <div class="container mt-5">
     <div class="row">
-        <div class="col-md-8">
-            <blog-post 
-            v-for="post in filteredPosts" 
-            :key="post.id" 
-            :post="post" 
-            />
-        </div>
+      <div class="col-md-10">
+        <BlogPost
+          v-for="post in posts"
+          :key="post.postId"
+          :post="post"
+        />
+      </div>
     </div>
-    </div>
+  </div>
+</div>
   </template>
   
   <script>
@@ -73,16 +55,8 @@
     methods: {
       async fetchPosts() {
         try {
-          const response = await api.get('/api/blogs/posts?offset=1&size=5&sort=createdAt,desc');
-          this.posts = response.data.contents.map(post => ({
-            id: post.id,
-            title: post.title,
-            date: post.date,
-            author: post.author,
-            link: `/blog/${post.author}?post-id=${post.id}`,
-            description: post.description,
-            tags: post.tags
-          }));
+          const response = await api.get('/api/posts/public');
+          this.posts = response.data.content.posts;
         } catch (error) {
           console.error('Failed to fetch posts:', error);
           this.posts=[];
@@ -133,4 +107,3 @@
     margin-top: 20px;
   }
   </style>
-  

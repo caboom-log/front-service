@@ -3,7 +3,7 @@ import { useAuthStore } from '@/store/auth';
 
 import MainPage from '@/views/main/MainPage.vue';
 import BlogMain from '@/views/blog/BlogMain.vue';
-import WritePost from '@/views/blog/WritePost.vue';
+import WritePost from '@/views/blog/posts/WritePost.vue';
 import LoginPage from '@/views/main/LoginPage.vue';
 import SignupPage from '@/views/main/SignupPage.vue';
 
@@ -55,17 +55,37 @@ const routes = [
     name: 'ManageBlogInfo',
     component: ManageBlogInfo,
     meta: { layout: 'BlogManageLayout', requiresAuth: true }
+  },
+  {
+    path: '/blog/:blogFid/manage/category',
+    name: 'ManageCategory',
+    component: ManageCategory,
+    meta: { layout: 'BlogManageLayout', requiresAuth: true }
+  },
+  {
+    path: '/blog/:blogFid/write',
+    name: 'WritePost',
+    component: WritePost,
+    meta: { layout: 'BlogSimpleLayout', requiresAuth: true }
+  },
+  {
+    path: '/blog/:blogFid/post/:postId',
+    name: 'PostDetail',
+    component: PostDetail,
+    meta: { layout: 'BlogSimpleLayout' }
   }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 import api from '@/api.js';
 import CreateBlog from '@/views/blog/CreateBlog.vue';
-import ManageBlog from '@/views/blog/ManageBlogMember.vue';
-import ManageBlogInfo from '@/views/blog/ManageBlogInfo.vue';
+import ManageBlog from '@/views/blog/manage/ManageBlogMember.vue';
+import ManageBlogInfo from '@/views/blog/manage/ManageBlogInfo.vue';
+import ManageCategory from '@/views/blog/manage/ManageCategory.vue';
+import PostDetail from '@/views/blog/posts/PostDetail.vue';
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
